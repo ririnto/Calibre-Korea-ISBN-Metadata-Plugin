@@ -59,10 +59,11 @@ def get_isbn(identifiers):
     @param identifiers: Optional[dict[str, str]]
     @return: Optional[str]
     """
-    if identifiers is None or identifiers.get("isbn") is None:
-        return None
-
-    return re.split(pattern='[( ]', string=identifiers.get("isbn"))[0]
+    return (
+        re.split(pattern='[( ]', string=identifiers.get("isbn"))[0]
+        if identifiers is not None and identifiers.get("isbn") is not None
+        else None
+    )
 
 
 def get_book_query(isbn):
@@ -273,24 +274,30 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         @param identifiers: Optional[dict[str, str]]
         @return: Optional[tuple[str, str, str]]
         """
-        if identifiers is None or identifiers.get("isbn") is None:
-            return None
-
-        isbn = get_isbn(identifiers=identifiers)
-
-        return "isbn", isbn, f"https://www.nl.go.kr/seoji/SearchApi.do?{self.get_book_json_query(isbn=isbn)}"
+        return (
+            (
+                "isbn",
+                isbn := get_isbn(identifiers=identifiers),
+                f"https://www.nl.go.kr/seoji/SearchApi.do?{self.get_book_json_query(isbn=isbn)}"
+            )
+            if identifiers is not None and identifiers.get("isbn") is not None
+            else None
+        )
 
     def get_book_url(self, identifiers):
         """
         @param identifiers: Optional[dict[str, str]]
         @return: Optional[tuple[str, str, str]]
         """
-        if identifiers is None or identifiers.get("isbn") is None:
-            return None
-
-        isbn = get_isbn(identifiers=identifiers)
-
-        return "isbn", isbn, f"https://nl.go.kr/seoji/contents/S80100000000.do?{get_book_query(isbn=isbn)}"
+        return (
+            (
+                "isbn",
+                isbn := get_isbn(identifiers=identifiers),
+                f"https://nl.go.kr/seoji/contents/S80100000000.do?{get_book_query(isbn=isbn)}"
+            )
+            if identifiers is not None and identifiers.get("isbn") is not None
+            else None
+        )
 
     def get_book_json_query(self, isbn):
         """

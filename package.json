@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "husky": "9.1.7",
+    "markdownlint-cli2": "0.23.3",
+    "npm-run-all2": "9.0.3"
+  },
+  "engines": {
+    "node": ">=24.15.0 <25"
+  },
+  "name": "calibre-korea-isbn-metadata-plugin-checks",
+  "packageManager": "pnpm@12.11.2",
+  "private": true,
+  "scripts": {
+    "check": "run-p check:*",
+    "check:markdownlint-cli2": "markdownlint-cli2",
+    "check:python": "run-s python:compile python:test",
+    "fix": "run-p fix:*",
+    "fix:markdownlint-cli2": "markdownlint-cli2 --fix",
+    "pre-commit": "run-s check",
+    "pre-push": "run-s check",
+    "prepare": "husky",
+    "python:compile": "python3 -m compileall -q __init__.py tests",
+    "python:test": "python3 -m unittest discover -s tests -v"
+  }
+}

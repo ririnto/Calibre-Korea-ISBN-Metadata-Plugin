@@ -1,0 +1,13 @@
+{
+  "config": {
+    "MD060": {
+      "style": "compact"
+    }
+  },
+  "globs": [
+    "**/*.md"
+  ],
+  "ignores": [
+    "node_modules/**"
+  ]
+}
