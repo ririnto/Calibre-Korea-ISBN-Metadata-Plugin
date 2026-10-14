@@ -36,8 +36,13 @@ git diff --check
 - Report the exact Markdownlint CLI2 and Python compilation results.
 - For documentation-only changes, confirm the source and marker are unchanged.
 
-`check` runs Markdownlint CLI2 and `python3 -m py_compile __init__.py`.
+`check` runs Markdownlint CLI2, Python compilation and query-builder tests.
 Compilation checks syntax without importing Calibre or executing the plugin.
+`python:compile` uses `python3 -m compileall -q __init__.py tests`.
+`python:test` uses `python3 -m unittest discover -s tests -v`.
+Tests load the actual plugin with fake Calibre and Beautiful Soup imports.
+They cover query outputs, missing ISBNs, lookup order and failure propagation.
+They do not call the provider or establish host compatibility.
 `fix` applies supported Markdown fixes without formatting Python source.
 Review fixes and run `check` again before committing.
 
@@ -51,7 +56,8 @@ Compose any existing required hooks rather than replacing them silently.
 Test hook changes with actual commits and pushes in disposable repositories.
 Include a failing check and verify that each Git operation is blocked.
 
-There is no repository test suite or automated check workflow.
+The query-builder tests run through both Git hook gates.
+There is no automated check workflow.
 A successful check does not prove Calibre compatibility or service behavior.
 Record unexecuted identify, cover and API authentication checks as NOT RUN.
 Do the same for packaging and host installation.

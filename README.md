@@ -60,14 +60,16 @@ pnpm run check
 
 Installation runs `prepare` to activate the Husky Git hooks.
 Commits run `pnpm run pre-commit` and pushes run `pnpm run pre-push`.
-Both gates check Markdown and compile `__init__.py` without importing it.
+Both gates check Markdown, compile Python and run isolated query-builder tests.
+Tests load the plugin with fake host imports and make no provider calls.
 Run `pnpm run fix` to apply supported Markdown fixes, then run the checks again.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for evidence and lifecycle requirements.
 
 ## Validation limits
 
-The repository contains no test suite or automated check workflow.
+The repository has query-builder tests and no automated check workflow.
 Markdown lint and Python compilation do not establish runtime correctness.
+Isolated tests do not establish Calibre host or live service behavior.
 Also compare documentation claims with the source and verify relative links.
 Check template frontmatter, rendered Markdown and `git diff --check`.
 
