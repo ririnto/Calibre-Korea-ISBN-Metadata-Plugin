@@ -13,7 +13,8 @@ Describe what failed and what you expected instead.
 ## Reproduction
 
 List the steps and provide an ISBN only if it is safe to share.
-State whether an ISBN identifier and the `api_key` option were configured without including the key.
+State whether the ISBN identifier and `api_key` option were configured.
+Do not include the key.
 
 ## Environment
 
