@@ -18,6 +18,20 @@ Preserve code, URLs, quotations, metadata and table syntax.
 Prefer `.yaml` when the consuming platform supports it.
 Verify required filenames and references before renaming files.
 
+Keep Markdownlint's Git ignore selection enabled with `gitignore: true`.
+Use compact Markdown tables and recursively sorted configuration keys.
+Never suppress, disable or weaken lint rules to make a change pass.
+
+## Dependencies
+
+Define dependency versions in the default `pnpm-workspace.yaml` catalog.
+Use `^x.y.z` caret ranges.
+Reference those entries with `catalog:` in `package.json`.
+Regenerate and commit `pnpm-lock.yaml` when changing the catalog.
+Prefer officially supported LTS releases, or stable releases when no LTS line exists.
+Verify compatibility with the declared runtime and tooling before selecting versions.
+Do not add version-plus-hash pins or remove lockfile integrity checks.
+
 ## Checks
 
 Use Node.js 24 LTS and the pnpm version selected by `packageManager`.
@@ -78,6 +92,9 @@ Stop discovery once evidence supports the implementation decision.
 Complete one bounded change and verify it before adding another.
 For defects, reproduce the trigger and fix the cause before updating guidance.
 Test behavior through real entry points and assert the result users observe.
+Assert behavior and document structure without hard-pinning prose wording in tests.
+Prefer condition inversion over mid-function `return`, `continue` or `break`.
+Preserve equivalent behavior and avoid deeper nesting.
 Keep automated checks separate from host and live service evidence.
 Finish authorized delivery with review, integration and main branch readback.
 Remove disposable resources only after confirming ownership and preservation.
