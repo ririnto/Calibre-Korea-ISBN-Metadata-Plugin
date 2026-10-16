@@ -97,7 +97,6 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
     ))
     options: tuple[Option] = (Option(name="api_key", type_="string", default=None, label="api_key", desc="api_key"),)
     prefer_results_with_isbn: bool = True
-    ignore_ssl_errors: bool = True
     has_html_comments: bool = True
 
     def is_configured(self):
@@ -122,7 +121,6 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
 
         try:
             book_json_url: str = self.get_book_json_url(identifiers=identifiers)[2]
-            log.debug(book_json_url)
 
             book_json = self.get_book_json(url=book_json_url, timeout=timeout)
             log.debug(book_json)
@@ -236,7 +234,6 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         if identifiers is None:
             identifiers = {}
         book_url = self.get_book_json_url(identifiers=identifiers)[2]
-        log.debug(book_url)
 
         book_json = self.get_book_json(url=book_url, timeout=timeout)
         log.debug(book_json)
@@ -318,6 +315,9 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         @param timeout: int
         @return: dict[str, str]
         """
-        contents = self.download_contents(url=url, timeout=timeout).decode()
-
+        try:
+            contents = self.download_contents(url=url, timeout=timeout)
+        except Exception:
+            raise RuntimeError("Authenticated metadata request failed") from None
+        contents = contents.decode()
         return json.loads(contents).get("docs")[0]
