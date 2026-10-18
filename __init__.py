@@ -235,10 +235,13 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
             identifiers = {}
         book_url = self.get_book_json_url(identifiers=identifiers)[2]
 
-        book_json = self.get_book_json(url=book_url, timeout=timeout)
-        log.debug(book_json)
-
-        self.download_image(url=book_json.get("TITLE_URL"), timeout=timeout, log=log, result_queue=result_queue)
+        try:
+            book_json = self.get_book_json(url=book_url, timeout=timeout)
+        except RuntimeError as e:
+            log.exception(e)
+        else:
+            log.debug(book_json)
+            self.download_image(url=book_json.get("TITLE_URL"), timeout=timeout, log=log, result_queue=result_queue)
 
     def download_contents(self, url, timeout):
         """

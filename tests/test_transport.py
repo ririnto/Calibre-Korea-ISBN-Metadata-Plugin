@@ -165,15 +165,10 @@ class AuthenticatedTransportTests(unittest.TestCase):
         self.log, self.results = _Log(), Queue()
 
     def _callback(self, name):
-        try:
-            getattr(self.plugin, name)(
-                self.log, self.results, Event(),
-                identifiers={"isbn": "9791190000000"}, timeout=17,
-            )
-        except Exception:
-            if name != "download_cover":
-                raise
-            self.log.exception("Failed to download cover from", self.plugin.name)
+        getattr(self.plugin, name)(
+            self.log, self.results, Event(),
+            identifiers={"isbn": "9791190000000"}, timeout=17,
+        )
 
     def _assert_request(self):
         url, timeout, browser = self.plugin.requests[0]
@@ -260,6 +255,10 @@ class AuthenticatedTransportTests(unittest.TestCase):
                         self.assertTrue(self.results.empty())
                         self.assertEqual(len(self.plugin.requests), 1)
                         self.assertTrue(self.log.exceptions)
-                        self.assertNotIn(self.key, "\n".join(self.log.exceptions))
+                        exception_log = "\n".join(self.log.exceptions)
+                        self.assertIn("Authenticated metadata request failed", exception_log)
+                        self.assertNotIn(self.key, exception_log)
+                        self.assertNotIn("cert_key=", exception_log)
+                        self.assertNotIn("www.nl.go.kr", exception_log)
                         self.assertNotIn(self.key, "\n".join(self.log.messages))
                         self.assertNotIn("cert_key=", "\n".join(self.log.messages))
