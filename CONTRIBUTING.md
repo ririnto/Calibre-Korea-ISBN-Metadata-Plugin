@@ -47,18 +47,24 @@ git diff --check
 - Compare each changed technical claim with the implementation.
 - Verify relative links and issue template YAML frontmatter.
 - Render changed Markdown and inspect headings, paragraphs, lists and commands.
-- Report the exact Markdownlint CLI2 and Python compilation results.
+- Report the exact Markdownlint CLI2, Ultracite and Python compilation results.
 - For documentation-only changes, confirm the source and marker are unchanged.
 
-`check` runs Markdownlint CLI2, Python compilation and query-builder tests.
+`pnpm run check` runs Markdownlint CLI2 and Ultracite.
+It also runs Python compilation and all 18 offline tests.
 Compilation checks syntax without importing Calibre or executing the plugin.
 `python:compile` uses `python3 -m compileall -q __init__.py tests`.
 `python:test` uses `python3 -m unittest discover -s tests -v`.
-Tests load the actual plugin with fake Calibre and Beautiful Soup imports.
-They cover query outputs, missing ISBNs, lookup order and failure propagation.
+All 18 offline tests use fake Calibre and Beautiful Soup imports.
+They load the actual plugin.
+They cover query-builder outputs, missing ISBNs, lookup order and failure propagation.
+They test identify and cover transport, malformed responses and safe logging.
 They do not call the provider or establish host compatibility.
-`fix` applies supported Markdown fixes without formatting Python source.
-Review fixes and run `check` again before committing.
+Ultracite is the sole executable caller of Oxlint and Oxfmt.
+Markdownlint CLI2 remains the Markdown semantic gate.
+`pnpm run fix` uses Markdownlint CLI2 and Ultracite.
+It does not format Python or Markdown through Oxfmt.
+Review fixes and run `pnpm run check` again before committing.
 
 Installation runs `prepare` and installs Husky at the Git root.
 The pre-commit hook invokes `pnpm run pre-commit`.
@@ -70,7 +76,7 @@ Compose any existing required hooks rather than replacing them silently.
 Test hook changes with actual commits and pushes in disposable repositories.
 Include a failing check and verify that each Git operation is blocked.
 
-The query-builder tests run through both Git hook gates.
+All 18 offline tests run through both Git hook gates.
 There is no automated check workflow.
 A successful check does not prove Calibre compatibility or service behavior.
 Record unexecuted identify, cover and API authentication checks as NOT RUN.
