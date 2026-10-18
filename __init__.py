@@ -233,11 +233,10 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         """
         if identifiers is None:
             identifiers = {}
-        book_url = self.get_book_json_url(identifiers=identifiers)[2]
-
         try:
+            book_url = self.get_book_json_url(identifiers=identifiers)[2]
             book_json = self.get_book_json(url=book_url, timeout=timeout)
-        except RuntimeError as e:
+        except (RuntimeError, TypeError, IndexError, UnicodeDecodeError, json.JSONDecodeError) as e:
             log.exception(e)
         else:
             log.debug(book_json)
