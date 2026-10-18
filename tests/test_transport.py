@@ -208,6 +208,46 @@ class AuthenticatedTransportTests(unittest.TestCase):
         self.assertEqual(self.plugin.requests[1][:2], ("https://example.invalid/cover.jpg", 17))
         self.assertEqual(self.log.exceptions, [])
 
+    def test_callbacks_without_isbn_log_and_return_without_requests(self):
+        for callback in ("identify", "download_cover"):
+            for identifiers in (None, {}):
+                with self.subTest(callback=callback, identifiers=identifiers):
+                    self.setUp()
+                    try:
+                        getattr(self.plugin, callback)(
+                            self.log, self.results, Event(), identifiers=identifiers, timeout=17,
+                        )
+                    except Exception as error:
+                        self.fail(f"{callback} raised {type(error).__name__}")
+                    self.assertTrue(self.results.empty())
+                    self.assertEqual(self.plugin.requests, [])
+                    self.assertEqual(len(self.log.exceptions), 1)
+
+    def test_callbacks_log_invalid_api_responses_without_results(self):
+        payloads = (
+            ("invalid_utf8", b"\xff"),
+            ("malformed_json", b"{"),
+            ("missing_docs", b"{}"),
+            ("empty_docs", b'{"docs": []}'),
+        )
+        for callback in ("identify", "download_cover"):
+            for response, payload in payloads:
+                with self.subTest(callback=callback, response=response):
+                    self.setUp()
+                    self.plugin.payload = payload
+                    try:
+                        self._callback(callback)
+                    except Exception as error:
+                        self.fail(f"{callback} raised {type(error).__name__} for {response}")
+                    self.assertTrue(self.results.empty())
+                    self.assertEqual(len(self.plugin.requests), 1)
+                    self._assert_request()
+                    self.assertEqual(len(self.log.exceptions), 1)
+                    exception_log = "\n".join(self.log.exceptions)
+                    self.assertNotIn(self.key, exception_log)
+                    self.assertNotIn("cert_key=", exception_log)
+                    self.assertNotIn("www.nl.go.kr", exception_log)
+
     def test_download_contents_and_json_success(self):
         url = self.plugin.get_book_json_url({"isbn": "9791190000000"})[2]
         self.assertEqual(self.plugin.download_contents(url, 17), self.plugin.payload)
