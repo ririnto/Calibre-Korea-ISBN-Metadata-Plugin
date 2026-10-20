@@ -40,17 +40,18 @@ Endpoint availability and successful authentication remain unverified.
 ## Repository files
 
 | File | Purpose |
-| :--- | --- |
+| :--- | :--- |
 | [Source implementation](__init__.py) | Calibre metadata source implementation. |
 | [plugin-import-name-Korea ISBN Metadata Plugin.txt](<plugin-import-name-Korea ISBN Metadata Plugin.txt>) | Empty plugin import marker with its exact filename. |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution scope and validation guidance. |
+| [AGENTS.md](AGENTS.md) | Repository agent entry point. |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Canonical contribution rules and validation guidance. |
 | [.github/ISSUE_TEMPLATE](.github/ISSUE_TEMPLATE) | Bug report and improvement templates. |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | Pull request evidence template. |
 
 ## Contributor checks
 
-Use Node.js 24 LTS, pnpm and Python 3 with the plugin's supported syntax.
-The `packageManager` field selects the pnpm version.
+Use Node.js 24 LTS and the pnpm version selected by `packageManager`.
+Use Python 3 that supports the plugin's syntax.
 Run these commands from the repository root.
 
 ```sh
@@ -59,25 +60,14 @@ pnpm run check
 ```
 
 Installation runs `prepare` to activate the Husky Git hooks.
-Commits run `pnpm run pre-commit` and pushes run `pnpm run pre-push`.
-Both gates check Markdown, compile Python and run isolated query-builder tests.
-Tests load the plugin with fake host imports and make no provider calls.
-Run `pnpm run fix` to apply supported Markdown fixes, then run the checks again.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for evidence and lifecycle requirements.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for check and hook details.
 
 ## Validation limits
 
-The repository has query-builder tests and no automated check workflow.
-Markdown lint and Python compilation do not establish runtime correctness.
-Isolated tests do not establish Calibre host or live service behavior.
-Also compare documentation claims with the source and verify relative links.
-Check template frontmatter, rendered Markdown and `git diff --check`.
-
-Live identify, cover download and API authentication remain NOT RUN.
-Packaging and Calibre host installation also remain NOT RUN.
+Contributor checks do not establish Calibre host compatibility or live service behavior.
+See [CONTRIBUTING.md](CONTRIBUTING.md#checks) for coverage limits.
 
 ## Reporting problems
 
-Use the repository's bug report or improvement template and follow [CONTRIBUTING.md](CONTRIBUTING.md).
-Review logs before sharing them because API URLs can contain `cert_key`.
-Remove keys, private paths and personal book data from reports.
+Use the repository's bug report or improvement template.
+Follow [CONTRIBUTING.md](CONTRIBUTING.md) when sharing evidence.

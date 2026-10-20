@@ -1,9 +1,23 @@
 # Contributing
 
 Discuss a concrete change in an issue before starting a product repair.
-Use the bug report template for observed failures.
-Use the improvement template for proposed changes.
-State the intended behavior and acceptance criteria to establish scope.
+Use [Bug reports](.github/ISSUE_TEMPLATE/bug_report.md) for observed failures.
+Use [Improvement proposals](.github/ISSUE_TEMPLATE/improvement.md) for changes.
+See [Working as an agent](#working-as-an-agent) for task scope and acceptance.
+
+## Working as an agent
+
+Before editing, state the outcome, affected paths, exclusions and observable acceptance.
+Keep each task to one bounded change within the agreed paths.
+Verify each bounded change before starting another.
+Preserve each task's evidence requirements.
+Label checks run in this task `ACTUAL`.
+Use `REUSED` only if relevant behavior, inputs and configuration are unchanged.
+Relevant tools must also remain unchanged.
+Explain why the evidence still applies.
+Label failed checks `FAILED`.
+Label checks not run `NOTRUN` and state why.
+Stop discovery when evidence supports the implementation decision.
 
 ## Documentation changes
 
@@ -50,12 +64,13 @@ git diff --check
 - Report the exact Markdownlint CLI2 and Python compilation results.
 - For documentation-only changes, confirm the source and marker are unchanged.
 
-`check` runs Markdownlint CLI2, Python compilation and query-builder tests.
+`check` runs Markdownlint CLI2, Python compilation and isolated unit tests.
 Compilation checks syntax without importing Calibre or executing the plugin.
 `python:compile` uses `python3 -m compileall -q __init__.py tests`.
 `python:test` uses `python3 -m unittest discover -s tests -v`.
 Tests load the actual plugin with fake Calibre and Beautiful Soup imports.
 They cover query outputs, missing ISBNs, lookup order and failure propagation.
+They also cover callback and invalid-response behavior.
 They do not call the provider or establish host compatibility.
 `fix` applies supported Markdown fixes without formatting Python source.
 Review fixes and run `check` again before committing.
@@ -73,23 +88,21 @@ Include a failing check and verify that each Git operation is blocked.
 The query-builder tests run through both Git hook gates.
 There is no automated check workflow.
 A successful check does not prove Calibre compatibility or service behavior.
-Record unexecuted identify, cover and API authentication checks as NOT RUN.
+Record unexecuted identify, cover and API authentication checks as NOTRUN.
 Do the same for packaging and host installation.
 Do not import the plugin or call the provider merely to validate prose.
 
 ## Safe evidence
 
 Never publish API keys, authenticated URLs, private host paths or personal data.
-The implementation logs API request URLs.
-Inspect and redact logs before attaching them.
-Propose API-key and malformed-response repairs separately with isolated inputs.
-Establish acceptance before implementing those repairs.
+Logs may include response data, identifiers and detail-page URLs.
+Inspect and redact logs before sharing them.
+Scope product repairs separately and verify each with isolated inputs.
+Set acceptance criteria before implementing each repair.
 
 ## Development lifecycle
 
-Define the outcome, affected paths, exclusions and observable acceptance first.
-Stop discovery once evidence supports the implementation decision.
-Complete one bounded change and verify it before adding another.
+See [Working as an agent](#working-as-an-agent).
 For defects, reproduce the trigger and fix the cause before updating guidance.
 Test behavior through real entry points and assert the result users observe.
 Assert behavior and document structure without hard-pinning prose wording in tests.
@@ -104,11 +117,10 @@ The script and hook surface follows the [Sinon harness tooling][sinon-harness].
 
 ## Pull requests and commits
 
-Use the pull request template and link the relevant issue when one exists.
-Keep changes within the agreed paths.
+Use the [pull request template](.github/pull_request_template.md).
+Link the relevant issue when one exists.
+See [Working as an agent](#working-as-an-agent) for evidence labels and scope.
 Request independent review of the complete posted diff.
-Report checks as executed, reused, failed, unsupported or NOTRUN.
-Explain any reused evidence and why its inputs and tools remain applicable.
 
 Write a concise commit subject, followed by a blank line and a substantive body.
 Explain the reason, changes, actual checks and material failures or NOTRUN limits.
