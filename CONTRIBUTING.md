@@ -64,7 +64,11 @@ git diff --check
 - Report the exact Markdownlint CLI2 and Python compilation results.
 - For documentation-only changes, confirm the source and marker are unchanged.
 
-`check` runs Markdownlint CLI2, Python compilation and isolated unit tests.
+`check` runs Ultracite and Markdownlint CLI2.
+It also compiles Python and runs isolated unit tests.
+Ultracite runs Oxlint and Oxfmt with the repository presets.
+Oxfmt excludes Markdown, which stays under Markdownlint CLI2.
+`docs/no-box-drawing` rejects Unicode box-drawing characters in Markdown.
 Compilation checks syntax without importing Calibre or executing the plugin.
 `python:compile` uses `python3 -m compileall -q __init__.py tests`.
 `python:test` uses `python3 -m unittest discover -s tests -v`.
@@ -72,7 +76,9 @@ Tests load the actual plugin with fake Calibre and Beautiful Soup imports.
 They cover query outputs, missing ISBNs, lookup order and failure propagation.
 They also cover callback and invalid-response behavior.
 They do not call the provider or establish host compatibility.
-`fix` applies supported Markdown fixes without formatting Python source.
+`fix` runs Ultracite fixes and supported Markdown fixes.
+Neither formatter changes Python source.
+The box-drawing rule reports violations without an automatic fix.
 Review fixes and run `check` again before committing.
 
 Installation runs `prepare` and installs Husky at the Git root.
