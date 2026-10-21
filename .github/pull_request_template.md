@@ -3,13 +3,13 @@
 ## Reason and changes
 
 Describe the problem, final behavior and affected paths.
-Link the related issue when one exists.
+Link the related issue.
 Compare acceptance criteria with the delivered evidence.
 
 ## Validation
 
 List checks and results using the [evidence labels][evidence-labels].
-Include reuse reasons, failures, unsupported checks and NOTRUN reasons.
+Include reuse reasons, failures, blocked requirements and NOTRUN reasons.
 For documentation changes, report source comparison, relative links and frontmatter.
 Report rendering and `git diff --check` results.
 See [Checks][checks] for maintained commands and coverage.
