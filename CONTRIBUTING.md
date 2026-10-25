@@ -36,7 +36,8 @@ Prefer `.yaml` when the consuming platform supports it.
 Verify required filenames and references before renaming files.
 
 Keep Markdownlint's Git ignore selection enabled with `gitignore: true`.
-Use compact Markdown tables and recursively sorted configuration keys.
+Use compact Markdown tables.
+Sort configuration keys recursively unless a formatter specifies their order.
 Never suppress, disable or weaken lint rules to make a change pass.
 
 ## Dependencies
