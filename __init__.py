@@ -33,7 +33,6 @@ def remove_keywords_in_string(item, keywords):
     """
     for keyword in keywords:
         item = item.replace(keyword, "")
-
     return item
 
 
@@ -118,13 +117,10 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         if identifiers is None:
             identifiers = {}
         log.info(f"identify - start. title={title}, authors={authors}, identifiers={identifiers}")
-
         try:
             book_json_url: str = self.get_book_json_url(identifiers=identifiers)[2]
-
             book_json = self.get_book_json(url=book_json_url, timeout=timeout)
             log.debug(book_json)
-
             title = book_json.get("TITLE")
             if book_json.get("AUTHOR"):
                 authors = remove_empty_strings(
@@ -140,33 +136,25 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
                 )
             else:
                 authors = None
-
             mi = Metadata(title=title, authors=authors)
             mi.publisher = book_json.get("PUBLISHER")
-
             try:
                 if book_json.get("REAL_PUBLISH_DATE") or book_json.get("PUBLISH_PREDATE"):
                     pubdate = book_json.get("REAL_PUBLISH_DATE") or book_json.get("PUBLISH_PREDATE")
                     mi.pubdate = strptime(val=pubdate, fmt="%Y%m%d")
             except Exception as e:
                 log.exception(e)
-
             mi.series = book_json.get("SERIES_TITLE")
             mi.series_index = book_json.get("SERIES_NO")
-
             mi.set_identifier(typ="isbn", val=book_json.get("EA_ISBN"))
             mi.set_identifier(typ="isbn_add_code", val=book_json.get("EA_ADD_CODE"))
-
             try:
                 book_url = self.get_book_url(identifiers=identifiers)
                 log.debug(book_url)
-
                 if book_url is None:
                     raise "book_url is None"
-
                 book_info = self.get_book_info(url=book_url[2], timeout=timeout)
                 log.debug(book_info)
-
                 try:
                     if book_info.get("키워드"):
                         mi.tags = remove_empty_strings(
@@ -179,13 +167,11 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
                         )
                 except Exception as e:
                     log.exception(e)
-
                 try:
                     if book_info.get("DOI"):
                         mi.set_identifier(typ="doi", val=book_info.get("DOI").lstrip("https://doi.org/"))
                 except Exception as e:
                     log.exception(e)
-
                 try:
                     if book_info.get("형태 및 본문언어") or book_info.get("서비스형태 및 본문언어"):
                         mi.languages = (
@@ -193,7 +179,6 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
                         )
                 except Exception as e:
                     log.exception(e)
-
                 try:
                     if book_info.get("comments"):
                         mi.comments = book_info.get("comments")
@@ -201,11 +186,8 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
                     log.exception(e)
             except Exception as e:
                 log.exception(e)
-
             self.clean_downloaded_metadata(mi=mi)
-
             log.debug(mi)
-
             result_queue.put(mi)
         except Exception as e:
             log.exception(e)
@@ -261,11 +243,9 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         lis = root.select(
             selector="#contents > div > div.resultViewDetail > div.resultBookInfo > div.bookDataWrap > ul > li"
         )
-
         data = {li.select_one(selector="strong").text.strip(): li.select_one(selector="div").text.strip() for li in lis}
         if "책소개" in root.text and root.select_one(".searchViewInfo"):
             data["comments"] = root.select_one(".searchViewInfo").decode()
-
         return data
 
     def get_book_json_url(self, identifiers):
