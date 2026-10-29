@@ -6,7 +6,7 @@
     "check": "run-p check:*",
     "check:markdownlint-cli2": "markdownlint-cli2",
     "check:python": "run-s python:compile python:test",
-    "check:ultracite": "ultracite check",
+    "check:ultracite": "ultracite check --type-aware",
     "fix": "run-p fix:*",
     "fix:markdownlint-cli2": "markdownlint-cli2 --fix",
     "fix:ultracite": "ultracite fix",
@@ -23,6 +23,7 @@
     "npm-run-all2": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
     "typescript": "catalog:",
     "ultracite": "catalog:"
   },
