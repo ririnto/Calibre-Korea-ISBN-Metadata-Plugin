@@ -52,7 +52,7 @@ Do not add version-plus-hash pins or remove lockfile integrity checks.
 
 ## Checks
 
-Use Node.js 24 LTS and the pnpm version selected by `.tool-versions`.
+Use Node.js 26 and the pnpm version selected by `.tool-versions`.
 Have Python 3 available as `python3` with support for the plugin's syntax.
 Run these commands from the repository root.
 
