@@ -50,7 +50,7 @@ Endpoint availability and successful authentication remain unverified.
 
 ## Contributor checks
 
-Use Node.js 26 and the pnpm version selected by `.tool-versions`.
+Use Node.js 26 and the pnpm version declared in `package.json`.
 Use Python 3 that supports the plugin's syntax.
 Run these commands from the repository root.
 
