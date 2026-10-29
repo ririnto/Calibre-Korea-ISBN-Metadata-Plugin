@@ -52,7 +52,7 @@ Do not add version-plus-hash pins or remove lockfile integrity checks.
 
 ## Checks
 
-Use Node.js 24 LTS and the pnpm version selected by `packageManager`.
+Use Node.js 24 LTS and the pnpm version selected by `.tool-versions`.
 Have Python 3 available as `python3` with support for the plugin's syntax.
 Run these commands from the repository root.
 
@@ -81,6 +81,7 @@ Check existing hook ownership before installation.
 Compose required hooks instead of replacing them.
 Run `pnpm run prepare` to restore Husky hooks after a checkout or local Git reset.
 Require both `pre-commit` and `pre-push` to run their maintained `check` gate.
+The hooks invoke `pnpm run pre-commit` and `pnpm run pre-push` directly.
 Test hook changes with actual commits and pushes in disposable repositories.
 Include a failing check and verify that each Git operation is blocked.
 
