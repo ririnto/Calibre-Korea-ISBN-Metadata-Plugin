@@ -1,6 +1,6 @@
 catalog:
   husky: ^9.1.7
-  katex: ^0.19.0
+  katex: ^0.19.1
   markdownlint: ^0.42.0
   markdownlint-cli2: ^0.24.0
   npm-run-all2: ^9.0.4
@@ -9,7 +9,7 @@ catalog:
   oxlint-tsgolint: ^7.0.2005
   smol-toml: ^1.9.0
   typescript: ^7.0.2
-  ultracite: ^8.0.1
+  ultracite: ^8.1.0
 
 minimumReleaseAgeExclude:
   - npm-run-all2@9.0.4

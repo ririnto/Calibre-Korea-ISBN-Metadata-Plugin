@@ -189,11 +189,11 @@ catalogs:
       specifier: ^7.0.2
       version: 7.0.2
     ultracite:
-      specifier: ^8.0.1
-      version: 8.0.1
+      specifier: ^8.1.0
+      version: 8.1.0
 
 overrides:
-  katex: ^0.19.0
+  katex: ^0.19.1
   smol-toml: ^1.9.0
 
 importers:
@@ -226,7 +226,7 @@ importers:
         version: 7.0.2
       ultracite:
         specifier: 'catalog:'
-        version: 8.0.1(oxfmt@0.74.0)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
+        version: 8.1.0(oxfmt@0.74.0)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
 
 packages:
 
@@ -903,8 +903,8 @@ packages:
     resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
     engines: {node: '>=0.10.0'}
 
-  katex@0.19.0:
-    resolution: {integrity: sha512-v6Tznz3zJ7u3niRCoDTsumM2+HA2XXcCu+WAacCeHD2z3p9A9Ks987o5FzfTGBN0e8A0vjEgIDvLbICrXpdw/Q==}
+  katex@0.19.1:
+    resolution: {integrity: sha512-jG8uKntjSEcm2EpQOh0XturpPuuC9r3Sq5HLHdsFdWZT27E672SF19QEi+of0/YeOy15lDgRhKvr5614uRrEfA==}
     hasBin: true
 
   linkify-it@6.1.0:
@@ -1207,10 +1207,6 @@ packages:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
     engines: {node: '>=0.10.0'}
 
-  string-width@8.2.1:
-    resolution: {integrity: sha512-IIaP0g3iy9Cyy18w3M9YcaDudujEAVHKt3a3QJg1+sr/oX96TbaGUubG0hJyCjCBThFH+tFpcIyoUHUn1ogaLA==}
-    engines: {node: '>=20'}
-
   string-width@8.3.0:
     resolution: {integrity: sha512-ZbmZM0JCihQN91dWnxoipT2KOEyHqEyfRXUyjuRhW8b/xnqPDoq4gWEVApTVa9db2wN8mmoikgFBbjh71+cGeQ==}
     engines: {node: '>=20'}
@@ -1246,12 +1242,12 @@ packages:
   ufo@1.6.4:
     resolution: {integrity: sha512-JFNbkD1Svwe0KvGi8GOeLcP4kAWQ609twvCdcHxq1oSL8svv39ZuSvajcD8B+5D0eL4+s1Is2D/O6KN3qcTeRA==}
 
-  ultracite@8.0.1:
-    resolution: {integrity: sha512-4XtB3My7o/O8uveSBPjMO6aPwkO7LEGDf2RCuR4jMVSJ4JByLNIb8+xpCR5M+HssgPrl0aSTQ/40od80ItmiqQ==}
-    engines: {node: '>=22.18.0'}
+  ultracite@8.1.0:
+    resolution: {integrity: sha512-YX14p9HzKjOZFi2N4zug+zM3757BZcRpxn8vnGKgO+0Vh3mnU9G1hZAgvSD9d1HAUyV1KSaCUAB8BfbqVXEnmQ==}
+    engines: {node: ^22.22.2 || >=24.15.0}
     hasBin: true
     peerDependencies:
-      '@biomejs/biome': ^2.5.0
+      '@biomejs/biome': ^2.6.2
       eslint: ^10.9.0
       oxfmt: '>=0.71.0 <1'
       oxlint: ^1.86.0
@@ -1590,7 +1586,7 @@ snapshots:
   cli-truncate@6.1.1:
     dependencies:
       slice-ansi: 9.0.1
-      string-width: 8.2.1
+      string-width: 8.3.0
 
   commander@15.0.0: {}
 
@@ -1747,7 +1743,7 @@ snapshots:
 
   jsonpointer@5.0.1: {}
 
-  katex@0.19.0:
+  katex@0.19.1:
     dependencies:
       commander: 15.0.0
 
@@ -1760,7 +1756,7 @@ snapshots:
       ansi-escapes: 7.3.0
       cli-cursor: 5.0.0
       slice-ansi: 9.0.1
-      string-width: 8.2.1
+      string-width: 8.3.0
       strip-ansi: 7.2.0
       wrap-ansi: 10.0.2
 
@@ -1897,7 +1893,7 @@ snapshots:
     dependencies:
       '@types/katex': 0.16.8
       devlop: 1.1.0
-      katex: 0.19.0
+      katex: 0.19.1
       micromark-factory-space: 2.1.0
       micromark-util-character: 2.1.1
       micromark-util-symbol: 2.0.1
@@ -2200,11 +2196,6 @@ snapshots:
 
   source-map-js@1.2.2: {}
 
-  string-width@8.2.1:
-    dependencies:
-      get-east-asian-width: 1.7.0
-      strip-ansi: 7.2.0
-
   string-width@8.3.0:
     dependencies:
       get-east-asian-width: 1.7.0
@@ -2251,7 +2242,7 @@ snapshots:
 
   ufo@1.6.4: {}
 
-  ultracite@8.0.1(oxfmt@0.74.0)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005)):
+  ultracite@8.1.0(oxfmt@0.74.0)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005)):
     dependencies:
       '@clack/prompts': 1.8.1
       cli-truncate: 6.1.1
@@ -2293,7 +2284,7 @@ snapshots:
   wrap-ansi@10.0.2:
     dependencies:
       ansi-styles: 6.2.3
-      string-width: 8.2.1
+      string-width: 8.3.0
 
   yaml@2.9.1: {}
 
