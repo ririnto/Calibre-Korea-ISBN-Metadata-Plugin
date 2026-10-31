@@ -1,8 +1,8 @@
 # Contributing
 
 Define the change in an issue before implementation.
-Use [Bug reports](.github/ISSUE_TEMPLATE/bug_report.md) for observed failures.
-Use [Improvement proposals](.github/ISSUE_TEMPLATE/improvement.md) for changes.
+Use [Bug reports](.github/ISSUE_TEMPLATE/bug_report.yaml) for observed failures.
+Use [Improvement proposals](.github/ISSUE_TEMPLATE/improvement.yaml) for changes.
 
 ## Working as an agent
 

@@ -1,6 +1,6 @@
 ---
-name: Improvement
-about: Propose a scoped change with evidence and acceptance criteria.
+name: Improvement (Markdown fallback)
+about: Temporary Markdown fallback while the YAML form is being verified.
 title: ""
 labels: ""
 assignees: ""

@@ -1,0 +1,34 @@
+name: Improvement
+description: Propose a scoped change with evidence and acceptance criteria.
+body:
+  - type: textarea
+    id: problem-and-evidence
+    attributes:
+      label: Problem and evidence
+      description: >-
+        Describe the concrete limitation and link the relevant source or issue. Remove API keys, authenticated URLs, private paths and personal data.
+    validations:
+      required: false
+  - type: textarea
+    id: proposed-scope
+    attributes:
+      label: Proposed scope
+      description: >-
+        Describe the intended behavior, affected files and consumers. Identify any required maintainer decision before implementation.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: List observable results and the isolated inputs needed to verify them.
+    validations:
+      required: false
+  - type: textarea
+    id: validation-and-limits
+    attributes:
+      label: Validation and limits
+      description: >-
+        Describe the checks needed and any unavailable host or service dependency. Distinguish source declarations from executed compatibility results.
+    validations:
+      required: false

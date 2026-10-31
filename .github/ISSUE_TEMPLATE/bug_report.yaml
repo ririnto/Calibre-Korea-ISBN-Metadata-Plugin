@@ -1,0 +1,40 @@
+name: Bug report
+description: Report an observed plugin or documentation failure.
+body:
+  - type: textarea
+    id: observed-behavior
+    attributes:
+      label: Observed behavior
+      description: Describe what failed and what you expected instead.
+    validations:
+      required: false
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: >-
+        List the steps and provide an ISBN only if it is safe to share. State whether the ISBN identifier and `api_key` option were configured. Do not include the key.
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Provide the plugin revision, Calibre version and operating system.
+    validations:
+      required: false
+  - type: textarea
+    id: evidence-and-checks
+    attributes:
+      label: Evidence and checks
+      description: >-
+        Provide redacted output and distinguish executed checks from NOTRUN checks. Remove API keys, authenticated URLs, private paths and personal data.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance
+      description: Describe the observable result that would resolve the report.
+    validations:
+      required: false
