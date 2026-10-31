@@ -11,8 +11,7 @@ catalog:
   typescript: ^7.0.2
   ultracite: ^8.1.0
 
-minimumReleaseAgeExclude:
-  - npm-run-all2@9.0.4
+minimumReleaseAge: 480
 
 overrides:
   katex: "catalog:"
