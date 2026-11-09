@@ -79,6 +79,7 @@ stateDiagram-v2
     [*] --> FetchRecord: Identify an ISBN
     FetchRecord --> NoResult: Lookup or record parsing fails
     FetchRecord --> FillAPIFields: First record is available
+    FillAPIFields --> NoResult: API field processing fails
     FillAPIFields --> FetchDetails: Fill fields from the API record
     FetchDetails --> CleanMetadata: Detail page or enrichment fails
     FetchDetails --> CleanMetadata: Fill available detail fields
@@ -90,27 +91,35 @@ stateDiagram-v2
 
 A detail-page failure does not discard fields from a usable API record.
 The generated property checks that the callback queues cleaned API metadata.
-It covers detail fetch and parse errors.
+It covers exceptions raised by the detail lookup boundary.
 A malformed date or detail field can fail without stopping other fill steps.
 
 ### Authenticated request and cover lookup
 
 ```mermaid
 stateDiagram-v2
-    [*] --> RequestRecord: Request metadata or cover
+    [*] --> BuildRequest: Request metadata or cover
+    BuildRequest --> NoResult: Missing ISBN or caught URL error
+    BuildRequest --> EscapedError: Cover lookup encounters another URL error
+    BuildRequest --> RequestRecord: Build the authenticated URL
     RequestRecord --> RequestFailed: Opening or reading the response fails
     RequestRecord --> ParseRecord: Read response bytes
-    ParseRecord --> NoResult: Decode, JSON or first-record selection fails
+    ParseRecord --> NoResult: Caught decode, JSON or selection error
+    ParseRecord --> NoResult: Identify catches another parsing error
+    ParseRecord --> EscapedError: Cover lookup encounters another error
     ParseRecord --> MetadataFill: Identify receives the first record
-    ParseRecord --> DownloadCover: Cover lookup passes the image URL to Calibre
+    ParseRecord --> DownloadCover: Cover lookup receives the first record
+    DownloadCover --> EscapedError: The record has no get method
     RequestFailed --> NoResult: Log a sanitized error
     MetadataFill --> [*]
     DownloadCover --> [*]: Calibre handles image download and queueing
+    EscapedError --> [*]: Error propagates to the caller
     NoResult --> [*]
 ```
 
-The plugin makes one authenticated metadata request per callback.
-It does not retry the request.
+Each callback makes at most one authenticated metadata request.
+A missing ISBN stops it before the request.
+The plugin does not retry the request.
 On a transport error it replaces the exception before the callback logs it.
 The generated property checks both callbacks at the open and read boundaries.
 It checks for one request, no queued result and no key in the log.
