@@ -6,6 +6,7 @@ These fixtures model browser policy and cloning, not installed TLS behavior.
 from datetime import datetime
 import importlib.util
 import json
+from itertools import product
 from pathlib import Path
 from queue import Queue
 import ssl
@@ -198,6 +199,46 @@ class AuthenticatedTransportTests(unittest.TestCase):
         self.assertEqual((metadata.series, metadata.series_index), ("Sample series", "2"))
         self.assertEqual(self.plugin.cleaned, [metadata])
         self.assertEqual(self.log.exceptions, [])
+
+    def test_generated_detail_failures_preserve_api_metadata(self):
+        for title, author, error in product(
+            ("A", "A longer title"),
+            ("First", "First; Second"),
+            (OSError("detail unavailable"), ValueError("detail malformed")),
+        ):
+            with self.subTest(title=title, author=author, error=type(error).__name__):
+                self.setUp()
+                self.book.update(TITLE=title, AUTHOR=author)
+                self.plugin.payload = json.dumps({"docs": [self.book]}).encode()
+                with patch.object(self.plugin, "get_book_info", side_effect=error):
+                    self._callback("identify")
+                self.assertEqual(self.results.qsize(), 1)
+                metadata = self.results.get_nowait()
+                self.assertEqual(metadata.title, title)
+                self.assertEqual(metadata.authors, tuple(part.strip() for part in author.split(";")))
+                self.assertEqual(metadata.identifiers["isbn"], self.book["EA_ISBN"])
+                self.assertEqual(self.plugin.cleaned, [metadata])
+                self.assertEqual(len(self.log.exceptions), 1)
+
+    def test_generated_transport_failures_stop_without_retry_or_secret_leak(self):
+        for callback, stage, key, isbn in product(
+            ("identify", "download_cover"),
+            ("open", "read"),
+            ("SYNTHETIC-key-A", "SYNTHETIC-key-B-987"),
+            ("9780000000000", "9791199999999"),
+        ):
+            with self.subTest(callback=callback, stage=stage, key=key, isbn=isbn):
+                self.setUp()
+                self.plugin.prefs["api_key"] = key
+                self.plugin.failure_stage, self.plugin.error_kind = stage, "url"
+                getattr(self.plugin, callback)(
+                    self.log, self.results, Event(), identifiers={"isbn": isbn}, timeout=17,
+                )
+                self.assertTrue(self.results.empty())
+                self.assertEqual(len(self.plugin.requests), 1)
+                self.assertEqual(len(self.log.exceptions), 1)
+                self.assertNotIn(key, "\n".join(self.log.messages))
+                self.assertNotIn("cert_key=", "\n".join(self.log.exceptions))
 
     def test_cover_success_uses_inherited_download(self):
         self._callback("download_cover")

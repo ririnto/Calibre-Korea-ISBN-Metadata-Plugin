@@ -3,6 +3,7 @@ Verify query-builder behavior with isolated Calibre import boundaries.
 """
 
 import importlib.util
+from itertools import product
 from pathlib import Path
 import sys
 from types import ModuleType
@@ -135,6 +136,26 @@ class QueryBuilderTests(unittest.TestCase):
                 result = self.plugin.get_isbn(_Identifiers(["guard", value], events))
                 self.assertEqual(result, "9791190000000")
                 self.assertEqual(events, [("get", "isbn"), ("get", "isbn")])
+
+    def test_generated_isbn_suffixes_keep_both_lookup_urls_consistent(self):
+        """
+        Keep the ISBN before the first space or parenthesis in both URLs.
+        """
+        for prefix, separator, suffix in product(
+            ("", "0", "9791190000000", "978123456789X"),
+            (" ", "("),
+            ("", "paperback", " extra (volume 2)"),
+        ):
+            with self.subTest(prefix=prefix, separator=separator, suffix=suffix):
+                identifiers = {"isbn": prefix + separator + suffix}
+                self.assertEqual(self.plugin.get_isbn(identifiers), prefix)
+                for builder in (
+                    self.plugin.NationalLibraryOfKoreaMetadataPlugin.get_book_json_url,
+                    self.plugin.NationalLibraryOfKoreaMetadataPlugin.get_book_url,
+                ):
+                    kind, isbn, url = builder(_QueryBuilder([]), identifiers)
+                    self.assertEqual((kind, isbn), ("isbn", prefix))
+                    self.assertTrue(url.endswith("isbn=" + prefix))
 
     def test_json_url_evaluation_order(self):
         """
