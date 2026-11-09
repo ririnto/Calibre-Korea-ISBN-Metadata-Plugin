@@ -48,6 +48,74 @@ Endpoint availability and successful authentication remain unverified.
 | [.github/ISSUE_TEMPLATE](.github/ISSUE_TEMPLATE) | Bug report and improvement templates. |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | Pull request evidence template. |
 
+## Lookup state machines
+
+The diagrams describe the plugin's current behavior, including failure paths.
+The contributor checks generate inputs for the production methods.
+They substitute Calibre and network boundaries.
+They do not establish live service or Calibre host behavior.
+
+### ISBN normalization
+
+```mermaid
+stateDiagram-v2
+    [*] --> CheckISBN: Receive identifiers
+    CheckISBN --> NoLookup: ISBN is missing or null
+    CheckISBN --> Normalize: ISBN is present
+    Normalize --> BuildURLs: Take text before first space or opening parenthesis
+    BuildURLs --> [*]: Return the normalized ISBN and lookup URL
+    NoLookup --> [*]: Return no URL
+```
+
+An empty ISBN remains present and produces an empty query value.
+The generated property checks the prefix in both URL builders.
+It includes ISBNs with space and parenthesis suffixes.
+The plugin does not validate ISBN checksums or encode query values in this step.
+
+### Metadata lookup and fill
+
+```mermaid
+stateDiagram-v2
+    [*] --> FetchRecord: Identify an ISBN
+    FetchRecord --> NoResult: Lookup or record parsing fails
+    FetchRecord --> FillAPIFields: First record is available
+    FillAPIFields --> FetchDetails: Fill fields from the API record
+    FetchDetails --> CleanMetadata: Detail page or enrichment fails
+    FetchDetails --> CleanMetadata: Fill available detail fields
+    CleanMetadata --> ResultQueued: Clean metadata and queue one result
+    CleanMetadata --> NoResult: Cleaning or queueing fails
+    ResultQueued --> [*]
+    NoResult --> [*]: Log the failure
+```
+
+A detail-page failure does not discard fields from a usable API record.
+The generated property checks that the callback queues cleaned API metadata.
+It covers detail fetch and parse errors.
+A malformed date or detail field can fail without stopping other fill steps.
+
+### Authenticated request and cover lookup
+
+```mermaid
+stateDiagram-v2
+    [*] --> RequestRecord: Request metadata or cover
+    RequestRecord --> RequestFailed: Opening or reading the response fails
+    RequestRecord --> ParseRecord: Read response bytes
+    ParseRecord --> NoResult: Decode, JSON or first-record selection fails
+    ParseRecord --> MetadataFill: Identify receives the first record
+    ParseRecord --> DownloadCover: Cover lookup passes the image URL to Calibre
+    RequestFailed --> NoResult: Log a sanitized error
+    MetadataFill --> [*]
+    DownloadCover --> [*]: Calibre handles image download and queueing
+    NoResult --> [*]
+```
+
+The plugin makes one authenticated metadata request per callback.
+It does not retry the request.
+On a transport error it replaces the exception before the callback logs it.
+The generated property checks both callbacks at the open and read boundaries.
+It checks for one request, no queued result and no key in the log.
+Calibre owns the subsequent image download.
+
 ## Contributor checks
 
 Use Node.js 26 and the pnpm version declared in `package.json`.
