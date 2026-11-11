@@ -3,7 +3,7 @@
 ## Reason and changes
 
 Describe the problem, final behavior and affected paths.
-Link the related issue.
+Link the related issue when one exists.
 Compare acceptance criteria with the delivered evidence.
 
 ## Validation
