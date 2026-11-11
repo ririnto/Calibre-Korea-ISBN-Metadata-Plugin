@@ -1,6 +1,7 @@
 # Contributing
 
-Define the change in an issue before implementation.
+Issues are optional for implementation, pull requests, and integration.
+Without an issue, record the problem, scope, and acceptance in the task or PR.
 Use [Bug reports](.github/ISSUE_TEMPLATE/bug_report.yaml) for observed failures.
 Use [Improvement proposals](.github/ISSUE_TEMPLATE/improvement.yaml) for changes.
 
@@ -140,7 +141,7 @@ Remove disposable resources only after confirming ownership and preservation.
 ### Prepare pull requests
 
 Use the [pull request template](.github/pull_request_template.md).
-Link the related issue.
+Link the related issue when one exists.
 Request independent review of the complete posted diff.
 
 ### Write commit messages
