@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["oxfmt.config.ts", "oxlint.config.ts", "rules/**/*.ts"]
+  "include": ["**/*", "**/.*/**/*"]
 }
