@@ -301,5 +301,5 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
             contents = self.download_contents(url=url, timeout=timeout)
         except Exception:
             raise RuntimeError("Authenticated metadata request failed") from None
-        contents = contents.decode()
-        return json.loads(contents).get("docs")[0]
+        decoded_contents = contents.decode()
+        return json.loads(decoded_contents).get("docs")[0]
