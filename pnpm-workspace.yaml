@@ -9,4 +9,4 @@ catalog:
   oxlint: ^1.93.0
   oxlint-tsgolint: ^7.0.2007
   typescript: ^7.0.2
-  ultracite: ^8.2.0
+  ultracite: ^8.2.1
