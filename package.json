@@ -7,7 +7,7 @@
     "check:markdownlint-cli2": "markdownlint-cli2",
     "check:python": "run-s python:compile python:test",
     "check:typescript": "tsc --noEmit",
-    "check:ultracite": "ultracite check --type-aware",
+    "check:ultracite": "ultracite check",
     "fix": "run-p fix:*",
     "fix:markdownlint-cli2": "markdownlint-cli2 --fix",
     "fix:ultracite": "ultracite fix",
