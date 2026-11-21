@@ -124,6 +124,7 @@ On a transport error it replaces the exception before the callback logs it.
 The generated property checks both callbacks at the open and read boundaries.
 It checks for one request, no queued result and no key in the log.
 Calibre owns the subsequent image download.
+The [TLA+ request model](proofs/README.md) checks both request invariants.
 
 ## Contributor checks
 
