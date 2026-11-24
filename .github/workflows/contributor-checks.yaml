@@ -1,0 +1,34 @@
+name: Contributor checks
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+          cache_dependency_path: pnpm-lock.yaml
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - name: Report acceptance limits
+        if: ${{ always() }}
+        run: |-
+          printf '%s\n' \
+            '- Calibre host acceptance: NOTRUN' \
+            '- Live provider acceptance: NOTRUN' \
+            '- Credential acceptance: NOTRUN' \
+            '- Live TLS acceptance: NOTRUN' >>"$GITHUB_STEP_SUMMARY"

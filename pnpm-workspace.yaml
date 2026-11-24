@@ -10,3 +10,4 @@ catalog:
   oxlint-tsgolint: ^7.0.2008
   typescript: ^7.0.2
   ultracite: ^8.3.1
+  yaml: ^2.9.1
