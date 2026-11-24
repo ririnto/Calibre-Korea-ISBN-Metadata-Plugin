@@ -8,6 +8,7 @@
     "check:python": "run-s python:compile python:test",
     "check:typescript": "tsc --noEmit",
     "check:ultracite": "ultracite check",
+    "check:workflow": "node rules/require-pull-request.ts",
     "fix": "run-p fix:*",
     "fix:markdownlint-cli2": "markdownlint-cli2 --fix",
     "fix:ultracite": "ultracite fix",
@@ -28,7 +29,8 @@
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
     "typescript": "catalog:",
-    "ultracite": "catalog:"
+    "ultracite": "catalog:",
+    "yaml": "catalog:"
   },
   "engines": {
     "node": "^24.22.3",
