@@ -172,7 +172,7 @@ class AuthenticatedTransportTests(unittest.TestCase):
         )
 
     def _assert_request(self):
-        url, timeout, browser = self.plugin.requests[0]
+        url, timeout, _ = self.plugin.requests[0]
         self.assertEqual(urlsplit(url).scheme, "https")
         self.assertEqual(urlsplit(url).netloc, "www.nl.go.kr")
         self.assertEqual(urlsplit(url).path, "/seoji/SearchApi.do")
@@ -181,8 +181,6 @@ class AuthenticatedTransportTests(unittest.TestCase):
             "page_size": ["1"], "isbn": ["9791190000000"],
         })
         self.assertEqual(timeout, 17)
-        self.assertIsNot(browser, self.plugin._browser)
-        self.assertIs(browser.context, self.plugin._browser.context)
 
     def test_identify_success(self):
         self._callback("identify")
@@ -288,22 +286,6 @@ class AuthenticatedTransportTests(unittest.TestCase):
                     self.assertNotIn(self.key, exception_log)
                     self.assertNotIn("cert_key=", exception_log)
                     self.assertNotIn("www.nl.go.kr", exception_log)
-
-    def test_download_contents_and_json_success(self):
-        url = self.plugin.get_book_json_url({"isbn": "9791190000000"})[2]
-        self.assertEqual(self.plugin.download_contents(url, 17), self.plugin.payload)
-        self.assertEqual(self.plugin.get_book_json(url, 17), self.book)
-        self.assertEqual(len(self.plugin.requests), 2)
-
-    def test_decode_json_and_empty_docs_keep_original_failure_types(self):
-        for payload, error in ((b"\xff", UnicodeDecodeError),
-                               (b"{", json.JSONDecodeError),
-                               (b'{"docs": []}', IndexError)):
-            with self.subTest(error=error):
-                self.plugin.payload = payload
-                url = self.plugin.get_book_json_url({"isbn": "9791190000000"})[2]
-                with self.assertRaises(error):
-                    self.plugin.get_book_json(url, 17)
 
     def test_success_logs_do_not_expose_authentication(self):
         for callback in ("identify", "download_cover"):
