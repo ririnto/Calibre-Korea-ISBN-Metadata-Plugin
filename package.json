@@ -8,7 +8,8 @@
     "check:python": "run-s python:compile python:test",
     "check:typescript": "tsc --noEmit",
     "check:ultracite": "ultracite check",
-    "check:workflow": "node rules/require-pull-request.ts",
+    "check:workflow": "node rules/check-workflow.ts",
+    "check:workflow-test": "node --test tests/check-workflow.test.ts",
     "fix": "run-p fix:*",
     "fix:markdownlint-cli2": "markdownlint-cli2 --fix",
     "fix:ultracite": "ultracite fix",
@@ -36,5 +37,52 @@
     "node": "^24.22.3",
     "pnpm": "^12.23.0"
   },
-  "packageManager": "pnpm@12.23.0"
+  "packageManager": "pnpm@12.23.0",
+  "workflowChecks": {
+    "actionDefaults": {
+      "actions/checkout@v7": {
+        "commit": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+        "defaults": {
+          "allow-unsafe-pr-checkout": "false",
+          "clean": "true",
+          "fetch-depth": "1",
+          "fetch-tags": "false",
+          "lfs": "false",
+          "persist-credentials": "true",
+          "set-safe-directory": "true",
+          "show-progress": "true",
+          "sparse-checkout-cone-mode": "true",
+          "ssh-strict": "true",
+          "ssh-user": "git",
+          "submodules": "false"
+        }
+      },
+      "actions/setup-node@v7": {
+        "commit": "949feb2413d6458794dcd2491c4babbbce0c15c1",
+        "defaults": {
+          "check-latest": "false"
+        }
+      },
+      "actions/setup-python@v7": {
+        "commit": "6d4fd22b20465ccc0f7354476588e8df7c9ca0e0",
+        "defaults": {
+          "allow-prereleases": "false",
+          "check-latest": "false",
+          "freethreaded": "false",
+          "mirror": "https://raw.githubusercontent.com/actions/python-versions/main",
+          "update-environment": "true"
+        }
+      },
+      "pnpm/action-setup@v6": {
+        "commit": "73e46992e05b19abd31f2f3c20e0e7370d762115",
+        "defaults": {
+          "cache": "false",
+          "cache_dependency_path": "pnpm-lock.yaml",
+          "package_json_file": "package.json",
+          "run_install": "null",
+          "standalone": "false"
+        }
+      }
+    }
+  }
 }
