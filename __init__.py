@@ -1,5 +1,6 @@
 import json
 import re
+from urllib.parse import urlencode
 
 import bs4
 
@@ -70,7 +71,7 @@ def get_book_query(isbn):
     @param isbn: str
     @return: str
     """
-    return '&'.join(('='.join(("schM", "intgr_detail_view_isbn")), '='.join(("isbn", isbn))))
+    return urlencode({"schM": "intgr_detail_view_isbn", "isbn": isbn})
 
 
 class NationalLibraryOfKoreaMetadataPlugin(Source):
@@ -292,13 +293,16 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
         @param isbn: str
         @return: str
         """
-        return '&'.join((
-            '='.join(("cert_key", self.prefs.get('api_key'))),
-            '='.join(("result_style", "json")),
-            '='.join(("page_no", '1')),
-            '='.join(("page_size", '1')),
-            '='.join(("isbn", isbn))
-        ))
+        api_key = self.prefs.get("api_key")
+        if not isinstance(api_key, str):
+            raise TypeError("API key must be a string")
+        return urlencode({
+            "cert_key": api_key,
+            "result_style": "json",
+            "page_no": "1",
+            "page_size": "1",
+            "isbn": isbn,
+        })
 
     def get_book_json(self, url, timeout):
         """

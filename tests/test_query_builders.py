@@ -87,17 +87,45 @@ class QueryBuilderTests(unittest.TestCase):
                     )
 
     def test_detail_url(self):
-        kind, isbn, url = self.plugin.get_book_url({"isbn": "9791190000000 extra"})
-        self.assertEqual((kind, isbn), ("isbn", "9791190000000"))
-        parsed = urlsplit(url)
-        self.assertEqual(
-            (parsed.scheme, parsed.netloc, parsed.path),
-            ("https", "nl.go.kr", "/seoji/contents/S80100000000.do"),
-        )
-        self.assertEqual(
-            parse_qs(parsed.query),
-            {"schM": ["intgr_detail_view_isbn"], "isbn": ["9791190000000"]},
-        )
+        for expected_isbn in ("9791190000000", "9791190000000+&=%#"):
+            with self.subTest(expected_isbn=expected_isbn):
+                kind, isbn, url = self.plugin.get_book_url({"isbn": expected_isbn + " extra"})
+                self.assertEqual((kind, isbn), ("isbn", expected_isbn))
+                parsed = urlsplit(url)
+                self.assertEqual(
+                    (parsed.scheme, parsed.netloc, parsed.path),
+                    ("https", "nl.go.kr", "/seoji/contents/S80100000000.do"),
+                )
+                self.assertEqual(
+                    parse_qs(parsed.query),
+                    {"schM": ["intgr_detail_view_isbn"], "isbn": [expected_isbn]},
+                )
+
+    def test_authenticated_lookup_query(self):
+        for key, expected_isbn in (
+            ("SYNTHETIC-query-key", "9791190000000"),
+            ("SYNTHETIC-key +/&=%#", "9791190000000+&=%#"),
+            ("", ""),
+        ):
+            with self.subTest(key=key, expected_isbn=expected_isbn):
+                self.plugin.prefs = {"api_key": key}
+                kind, isbn, url = self.plugin.get_book_json_url({"isbn": expected_isbn})
+                self.assertEqual((kind, isbn), ("isbn", expected_isbn))
+                self.assertEqual(
+                    parse_qs(urlsplit(url).query, keep_blank_values=True),
+                    {
+                        "cert_key": [key],
+                        "result_style": ["json"],
+                        "page_no": ["1"],
+                        "page_size": ["1"],
+                        "isbn": [expected_isbn],
+                    },
+                )
+
+    def test_authenticated_lookup_rejects_unset_key(self):
+        self.plugin.prefs = {"api_key": None}
+        with self.assertRaises(TypeError):
+            self.plugin.get_book_json_url({"isbn": "9791190000000"})
 
     def test_empty_isbn_is_preserved(self):
         identifiers = {"isbn": ""}
