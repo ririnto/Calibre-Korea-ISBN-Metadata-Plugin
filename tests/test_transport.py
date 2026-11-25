@@ -286,8 +286,13 @@ class AuthenticatedTransportTests(unittest.TestCase):
         payloads = (
             ("invalid_utf8", b"\xff"),
             ("malformed_json", b"{"),
+            ("non_object_response", json.dumps([self.key]).encode()),
             ("missing_docs", b"{}"),
             ("empty_docs", b'{"docs": []}'),
+            ("object_docs", json.dumps({"docs": {"0": self.book}}).encode()),
+            ("scalar_docs", json.dumps({"docs": self.key}).encode()),
+            ("null_record", b'{"docs": [null]}'),
+            ("scalar_record", json.dumps({"docs": [self.key]}).encode()),
         )
         for callback in ("identify", "download_cover"):
             for response, payload in payloads:
@@ -306,6 +311,8 @@ class AuthenticatedTransportTests(unittest.TestCase):
                     self.assertNotIn(self.key, exception_log)
                     self.assertNotIn("cert_key=", exception_log)
                     self.assertNotIn("www.nl.go.kr", exception_log)
+                    self.assertNotIn(self.key, "\n".join(self.log.messages))
+                    self.assertNotIn("cert_key=", "\n".join(self.log.messages))
 
     def test_success_logs_do_not_expose_authentication(self):
         for callback in ("identify", "download_cover"):

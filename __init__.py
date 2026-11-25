@@ -310,5 +310,8 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
             contents = self.download_contents(url=url, timeout=timeout)
         except Exception:
             raise RuntimeError("Authenticated metadata request failed") from None
-        decoded_contents = contents.decode()
-        return json.loads(decoded_contents).get("docs")[0]
+        response = json.loads(contents.decode())
+        docs = response.get("docs") if isinstance(response, dict) else None
+        if not isinstance(docs, list) or not docs or not isinstance(docs[0], dict):
+            raise TypeError("Invalid ISBN API response")
+        return docs[0]
