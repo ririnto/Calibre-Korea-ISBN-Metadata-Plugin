@@ -168,8 +168,17 @@ class NationalLibraryOfKoreaMetadataPlugin(Source):
                 except Exception as e:
                     log.exception(e)
                 try:
-                    if book_info.get("DOI"):
-                        mi.set_identifier(typ="doi", val=book_info.get("DOI").lstrip("https://doi.org/"))
+                    if doi := book_info.get("DOI"):
+                        for prefix in (
+                            "https://doi.org/",
+                            "http://doi.org/",
+                            "https://dx.doi.org/",
+                            "http://dx.doi.org/",
+                        ):
+                            if doi.startswith(prefix):
+                                doi = doi.removeprefix(prefix)
+                                break
+                        mi.set_identifier(typ="doi", val=doi)
                 except Exception as e:
                     log.exception(e)
                 try:

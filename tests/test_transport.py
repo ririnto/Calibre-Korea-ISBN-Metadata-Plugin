@@ -198,6 +198,26 @@ class AuthenticatedTransportTests(unittest.TestCase):
         self.assertEqual(self.plugin.cleaned, [metadata])
         self.assertEqual(self.log.exceptions, [])
 
+    def test_identify_preserves_doi_identifiers(self):
+        doi = "10.1234/example"
+        for prefix in (
+            "",
+            "https://doi.org/",
+            "http://doi.org/",
+            "https://dx.doi.org/",
+            "http://dx.doi.org/",
+        ):
+            with self.subTest(prefix=prefix):
+                self.setUp()
+                with patch.object(
+                    self.plugin,
+                    "get_book_info",
+                    return_value={"DOI": f"{prefix}{doi}"},
+                ):
+                    self._callback("identify")
+                metadata = self.results.get_nowait()
+                self.assertEqual(metadata.identifiers["doi"], doi)
+
     def test_generated_detail_failures_preserve_api_metadata(self):
         for title, author, error in product(
             ("A", "A longer title"),
