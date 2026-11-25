@@ -65,6 +65,7 @@ jobs:
         with:
           cache: false
           cache_dependency_path: pnpm-lock.yaml
+          run_install: null
       - uses: actions/checkout@v7
         with:
           fetch-depth: 1
@@ -79,6 +80,10 @@ jobs:
   match(
     failing.stderr,
     /workflow\/no-default-inputs \(R35\).*pnpm\/action-setup@v6.*input cache /u
+  );
+  match(
+    failing.stderr,
+    /workflow\/no-default-inputs \(R35\).*pnpm\/action-setup@v6.*input run_install /u
   );
   match(
     failing.stderr,
