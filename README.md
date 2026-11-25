@@ -104,12 +104,11 @@ stateDiagram-v2
     BuildRequest --> RequestRecord: Build the authenticated URL
     RequestRecord --> RequestFailed: Opening or reading the response fails
     RequestRecord --> ParseRecord: Read response bytes
-    ParseRecord --> NoResult: Caught decode, JSON or selection error
+    ParseRecord --> NoResult: Caught decode, JSON or response shape error
     ParseRecord --> NoResult: Identify catches another parsing error
     ParseRecord --> EscapedError: Cover lookup encounters another error
     ParseRecord --> MetadataFill: Identify receives the first record
     ParseRecord --> DownloadCover: Cover lookup receives the first record
-    DownloadCover --> EscapedError: The record has no get method
     RequestFailed --> NoResult: Log a sanitized error
     MetadataFill --> [*]
     DownloadCover --> [*]: Calibre handles image download and queueing
@@ -121,6 +120,9 @@ Each callback makes at most one authenticated metadata request.
 A missing ISBN stops it before the request.
 The plugin does not retry the request.
 On a transport error it replaces the exception before the callback logs it.
+The lookup requires a JSON object with a nonempty `docs` array.
+The first item in `docs` must be an object.
+Both callbacks log a sanitized error and queue no result for invalid shapes.
 The generated property checks both callbacks at the open and read boundaries.
 It checks for one request, no queued result and no key in the log.
 Calibre owns the subsequent image download.
