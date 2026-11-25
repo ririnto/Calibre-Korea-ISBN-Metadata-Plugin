@@ -68,8 +68,7 @@ for (const workflowName of workflowNames) {
       )) {
         const value = step.with[input];
         if (
-          (value === null ||
-            typeof value === "string" ||
+          (typeof value === "string" ||
             typeof value === "boolean" ||
             typeof value === "number") &&
           String(value) === defaultValue &&

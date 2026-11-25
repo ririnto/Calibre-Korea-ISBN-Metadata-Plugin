@@ -1,4 +1,4 @@
-import { equal, match } from "node:assert/strict";
+import { doesNotMatch, equal, match } from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -81,10 +81,7 @@ jobs:
     failing.stderr,
     /workflow\/no-default-inputs \(R35\).*pnpm\/action-setup@v6.*input cache /u
   );
-  match(
-    failing.stderr,
-    /workflow\/no-default-inputs \(R35\).*pnpm\/action-setup@v6.*input run_install /u
-  );
+  doesNotMatch(failing.stderr, /run_install/u);
   match(
     failing.stderr,
     /workflow\/no-default-inputs \(R35\).*actions\/checkout@v7.*fetch-depth/u
