@@ -18,7 +18,6 @@ jobs:
       - uses: pnpm/action-setup@v6
         with:
           cache: true
-          cache_dependency_path: pnpm-lock.yaml
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
