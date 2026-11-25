@@ -104,8 +104,7 @@ stateDiagram-v2
     BuildRequest --> RequestRecord: Build the authenticated URL
     RequestRecord --> RequestFailed: Opening or reading the response fails
     RequestRecord --> ParseRecord: Read response bytes
-    ParseRecord --> NoResult: Caught decode, JSON or response shape error
-    ParseRecord --> NoResult: Identify catches another parsing error
+    ParseRecord --> NoResult: Decode, JSON or shape error<br/>Any identify error
     ParseRecord --> EscapedError: Cover lookup encounters another error
     ParseRecord --> MetadataFill: Identify receives the first record
     ParseRecord --> DownloadCover: Cover lookup receives the first record
